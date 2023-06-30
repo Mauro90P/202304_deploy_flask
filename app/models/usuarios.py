@@ -10,11 +10,11 @@ class Usuario:
     def __init__(self, data):
         self.id = data.get('id', 0)
         self.nombre = data.get('nombre')
-        self.apellido = data.get('apellido')
-        self.email = data['email']
-        self.password = data['password']
-        self.created_at = data.get('created_at', '')
-        self.updated_at = data.get('updated_at', '')
+        self.alias = data.get('alias')
+        self.email = data.get('email')
+        self.password = data.get('password')
+        self.fecha_nacimiento = data.get('fecha_nacimiento')
+        self.pokes_recibidos = data.get('pokes_recibidos')
 
 
     @staticmethod
@@ -33,7 +33,7 @@ class Usuario:
         todos_los_datos = []
 
         sql = """
-        SELECT id, nombre, apellido, email, password, created_at, updated_at FROM usuarios;
+        SELECT id, nombre, alias, email, password, fecha_nacimiento FROM usuarios;
         """
         result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql);
         for fila in result:
@@ -42,19 +42,21 @@ class Usuario:
         return todos_los_datos
 
     def crear(self):
-        sql = f"INSERT INTO usuarios (nombre, apellido, email,password ,created_at,updated_at) VALUES (%(nombre)s, %(apellido)s, %(email)s,%(password)s,NOW(),NOW());"
+        sql = "INSERT INTO usuarios (nombre, alias, email, password, fecha_nacimiento) VALUES (%(nombre)s, %(alias)s, %(email)s, %(password)s, %(fecha_nacimiento)s);"
         data = {
+            'nombre': self.nombre,
+            'alias': self.alias,
             'email': self.email,
             'password': self.password,
-            'nombre': self.nombre,
-            'apellido': self.apellido
+            'fecha_nacimiento': self.fecha_nacimiento,
+
         }
         self.id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         return self
 
     @classmethod
     def save(cls, data):
-        sql = f"INSERT INTO usuarios (nombre, apellido, email,password ,created_at,updated_at) VALUES (%(nombre)s, %(apellido)s, %(email)s,%(password)s,NOW(),NOW());"
+        sql = "INSERT INTO usuarios (nombre, alias, email, password, fecha_nacimiento) VALUES (%(nombre)s, %(alias)s, %(email)s, %(password)s, %(fecha_nacimiento)s);"
         id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         print("ID:", id)
         resultado = None
@@ -65,30 +67,35 @@ class Usuario:
     @classmethod
     def get(cls, id):
         sql = """
-        SELECT id, email,nombre, apellido,  password, created_at, updated_at FROM usuarios where id = %(id)s;
+        SELECT id, nombre, alias, email, password, fecha_nacimiento,pokes_recibidos FROM usuarios where id != %(id)s;
         """
         data = {
             'id': id
         }
         result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data);
-        
         return cls(result[0])
+
+
+#3_/procesar_login procesa el regsitro del login donde hace match el correo con password
 
     @classmethod
     def get_by_email(cls, email):
         sql = """
-        SELECT id, email,nombre, apellido, password, created_at, updated_at FROM usuarios where email = %(email)s;
+        SELECT id, email, password, nombre,alias FROM usuarios where email = %(email)s;
         """
         data = {
             'email': email
         }
-        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data);
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
 
         if result:
             return cls(result[0])
 
         return None
     
+
+
+#4_/Elimina registros   
     @classmethod
     def delete(cls, id):
         sql = """
@@ -109,8 +116,8 @@ class Usuario:
                 email = %(email)s,
                 password = %(password)s,
                 nombre = %(nombre)s,
-                apellido = %(apellido)s,
-                updated_at = NOW()
+                alias = %(alias)s,
+                pokes_recibidos = %(pokes_recibidos)s,
                 WHERE id = %(id)s;
             """
 
@@ -118,7 +125,8 @@ class Usuario:
             'email': self.email,
             'password': self.password,
             'nombre': self.nombre,
-            'apellido': self.apellido,
+            'alias': self.alias,
+            'pokes_recibidos':self.pokes_recibidos,
             'id': self.id
         }
         self.id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)

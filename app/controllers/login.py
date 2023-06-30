@@ -1,17 +1,23 @@
 from flask import render_template, request, redirect, session, flash
 from app.models.usuarios import Usuario
+from datetime import datetime
 from app import app
 from flask_bcrypt import Bcrypt        
 bcrypt = Bcrypt(app) 
 
+
+
+#1_/login: Renderiza la plantilla 'auth/login.html'
 @app.route('/login')
 def login():
 
     if 'usuario' in session:
         return redirect('/')
+    session['start_time'] = datetime.now()
         
-
     return render_template('auth/login.html')
+
+#2_/procesar_login: Procesa el formulario de inicio de sesión enviado por POST
 
 @app.route('/procesar_login', methods=['POST'])
 def procesar_login():
@@ -27,9 +33,12 @@ def procesar_login():
 
     data = {
         "usuario_id": usuario_encontrado.id,
-        "nombre": usuario_encontrado.nombre,
-        "apellido": usuario_encontrado.apellido,
         "email": usuario_encontrado.email,
+        "password": usuario_encontrado.password,
+        "nombre": usuario_encontrado.nombre,
+        "alias": usuario_encontrado.alias,
+        "pokes_recibidos": usuario_encontrado.pokes_recibidos,
+
     }
 
     if login_seguro:
@@ -41,6 +50,12 @@ def procesar_login():
         return redirect('/login')
 
     return redirect('/')
+
+
+
+
+#3_/procesar_registro: Procesa el formulario de registro enviado por POST
+
 
 @app.route('/procesar_registro', methods=['POST'])
 def procesar_registro():
@@ -56,9 +71,10 @@ def procesar_registro():
     password_hash = bcrypt.generate_password_hash(request.form['password'])
 
     data = {
-        'email': request.form['email'],
         'nombre': request.form['nombre'],
-        'apellido': request.form['apellido'],
+        'alias': request.form['alias'],
+        'email': request.form['email'],
+        'fecha_nacimiento': request.form['fecha_nacimiento'],
         'password': password_hash,
     }
 
@@ -75,6 +91,9 @@ def procesar_registro():
         flash("Errores", "danger")
 
     return redirect('/login')
+
+
+#4_/salir: Borra todos los datos de la sesión 
 
 @app.route('/salir')
 def salir():
