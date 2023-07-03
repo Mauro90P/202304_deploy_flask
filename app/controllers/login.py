@@ -1,21 +1,18 @@
 from flask import render_template, request, redirect, session, flash
 from app.models.usuarios import Usuario
-from datetime import datetime
+from app.models.viajes import Viajes
 from app import app
 from flask_bcrypt import Bcrypt        
 bcrypt = Bcrypt(app) 
 
-
-
 #1_/login: Renderiza la plantilla 'auth/login.html'
-@app.route('/login')
+
+@app.route('/index')
 def login():
 
     if 'usuario' in session:
         return redirect('/')
-    session['start_time'] = datetime.now()
-        
-    return render_template('auth/login.html')
+    return render_template('index.html')
 
 #2_/procesar_login: Procesa el formulario de inicio de sesión enviado por POST
 
@@ -27,18 +24,16 @@ def procesar_login():
 
     if not usuario_encontrado:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/login')
+        return redirect('/index')
 
     login_seguro = bcrypt.check_password_hash(usuario_encontrado.password, request.form['password'])
 
     data = {
         "usuario_id": usuario_encontrado.id,
         "email": usuario_encontrado.email,
-        "password": usuario_encontrado.password,
+        "apellido": usuario_encontrado.apellido,
         "nombre": usuario_encontrado.nombre,
-        "alias": usuario_encontrado.alias,
-        "pokes_recibidos": usuario_encontrado.pokes_recibidos,
-
+        "password": usuario_encontrado.password,
     }
 
     if login_seguro:
@@ -47,10 +42,9 @@ def procesar_login():
 
     else:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/login')
+        return redirect('/registro')
 
-    return redirect('/')
-
+    return redirect('/index')
 
 
 
@@ -63,25 +57,24 @@ def procesar_registro():
 
     if request.form['password'] != request.form['confirm_password']:
         flash("La contraseña no es igual", "danger")
-        return redirect('/login')
+        return redirect('/registro')
     
     if not Usuario.validar(request.form):
-        return redirect('/login')
+        return redirect('/index')
 
     password_hash = bcrypt.generate_password_hash(request.form['password'])
 
     data = {
         'nombre': request.form['nombre'],
-        'alias': request.form['alias'],
         'email': request.form['email'],
-        'fecha_nacimiento': request.form['fecha_nacimiento'],
+        'apellido': request.form['apellido'],
         'password': password_hash,
     }
 
     existe_usuario = Usuario.get_by_email(request.form['email'])
     if existe_usuario:
         flash("el correo ya está registrado.", "danger")
-        return redirect('/login')
+        return redirect('/index')
 
 
     resultado = Usuario.save(data)
@@ -90,7 +83,7 @@ def procesar_registro():
     else:
         flash("Errores", "danger")
 
-    return redirect('/login')
+    return redirect('/index')
 
 
 #4_/salir: Borra todos los datos de la sesión 
@@ -99,5 +92,5 @@ def procesar_registro():
 def salir():
     session.clear()
     flash('Saliste sin problemas!!!', 'info')
-    return redirect('/login')
+    return redirect('/index')
 

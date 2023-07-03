@@ -10,11 +10,9 @@ class Usuario:
     def __init__(self, data):
         self.id = data.get('id', 0)
         self.nombre = data.get('nombre')
-        self.alias = data.get('alias')
+        self.apellido = data.get('apellido')
         self.email = data.get('email')
         self.password = data.get('password')
-        self.fecha_nacimiento = data.get('fecha_nacimiento')
-        self.pokes_recibidos = data.get('pokes_recibidos')
 
 
     @staticmethod
@@ -33,7 +31,7 @@ class Usuario:
         todos_los_datos = []
 
         sql = """
-        SELECT id, nombre, alias, email, password, fecha_nacimiento FROM usuarios;
+        SELECT id, nombre,apellido,email, password FROM usuarios;
         """
         result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql);
         for fila in result:
@@ -42,21 +40,19 @@ class Usuario:
         return todos_los_datos
 
     def crear(self):
-        sql = "INSERT INTO usuarios (nombre, alias, email, password, fecha_nacimiento) VALUES (%(nombre)s, %(alias)s, %(email)s, %(password)s, %(fecha_nacimiento)s);"
+        sql = "INSERT INTO Usuarios (nombre,apellido,email, password) VALUES (%(nombre)s,%(apellido)s, %(email)s, %(password)s);"
         data = {
             'nombre': self.nombre,
-            'alias': self.alias,
             'email': self.email,
+            'apellido': self.apellido,
             'password': self.password,
-            'fecha_nacimiento': self.fecha_nacimiento,
-
         }
         self.id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         return self
 
     @classmethod
     def save(cls, data):
-        sql = "INSERT INTO usuarios (nombre, alias, email, password, fecha_nacimiento) VALUES (%(nombre)s, %(alias)s, %(email)s, %(password)s, %(fecha_nacimiento)s);"
+        sql = "INSERT INTO Usuarios (nombre, apellido,email, password) VALUES (%(nombre)s, %(apellido)s,%(email)s, %(password)s);"
         id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         print("ID:", id)
         resultado = None
@@ -67,7 +63,7 @@ class Usuario:
     @classmethod
     def get(cls, id):
         sql = """
-        SELECT id, nombre, alias, email, password, fecha_nacimiento,pokes_recibidos FROM usuarios where id != %(id)s;
+        SELECT id, nombre,apellido,email, password FROM Usuarios where id = %(id)s;
         """
         data = {
             'id': id
@@ -81,7 +77,7 @@ class Usuario:
     @classmethod
     def get_by_email(cls, email):
         sql = """
-        SELECT id, email, password, nombre,alias FROM usuarios where email = %(email)s;
+        SELECT id, nombre, apellido,email, password FROM Usuarios where email = %(email)s;
         """
         data = {
             'email': email
@@ -92,14 +88,13 @@ class Usuario:
             return cls(result[0])
 
         return None
-    
 
 
 #4_/Elimina registros   
     @classmethod
     def delete(cls, id):
         sql = """
-        DELETE FROM usuarios where id = %(id)s;
+        DELETE FROM Usuarios where id = %(id)s;
         """
         data = {
             'id': id
@@ -116,8 +111,7 @@ class Usuario:
                 email = %(email)s,
                 password = %(password)s,
                 nombre = %(nombre)s,
-                alias = %(alias)s,
-                pokes_recibidos = %(pokes_recibidos)s,
+                apellido = %(email)s,
                 WHERE id = %(id)s;
             """
 
@@ -125,8 +119,7 @@ class Usuario:
             'email': self.email,
             'password': self.password,
             'nombre': self.nombre,
-            'alias': self.alias,
-            'pokes_recibidos':self.pokes_recibidos,
+            'apellido': self.apellido,
             'id': self.id
         }
         self.id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
