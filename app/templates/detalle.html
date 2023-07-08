@@ -13,11 +13,12 @@
         </li>
     </ul>
 </nav>
-<h2 class="card-text" style="color: blueviolet; margin-top: 40px;">Welcome, {{session['usuario']['nombre']}}!</h2>
+<h2 class="card-text" style="color: blueviolet; margin-top: 40px;">Welcome, {{session.usuario.nombre}}!</h2>
 
 <body>
     <div class="container">
         <h2 style="margin-top: 40px;">Your Trip Schedules</h2>
+        {%if data%}
         <table class="table table-bordered border-primary">
             <thead>
                 <tr>
@@ -31,18 +32,22 @@
             <tbody>
                 {% for viaje in data %}
                 <tr>
-                    <td><a href="/viaje">{{ viaje.destino }}</a></td>
+                    <td><a href="/viaje/{{viaje.id}}">{{ viaje.destino }}</a></td>
                     <td>{{ viaje.fecha_desde }}</td>
                     <td>{{ viaje.fecha_hasta }}</td>
                     <td>{{ viaje.descripcion }}</td>
                     <td>
                         <a href="#">Cancel</a>
-                        <a href="#">Delete</a>
+                        <a href="/delete/{{viaje.id}}">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {%else%}
+        <p>sin viajes
+        </p>
+        {%endif%}
         <h2 style="margin-top: 40px;">Other User's Travel Plans</h2>
         <table class="table table-bordered border-primary">
             <thead>
@@ -54,12 +59,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for viaje in data %}
+                {% for viaje in otros_viajes %}
                 <tr>
-                    <td><a href="/viaje">{{ viaje.destino }}</td>
+                    <td><a href="/viaje/{{viaje.id}}">{{ viaje.destino }}</td>
                     <td>{{viaje.fecha_desde}}</td>
                     <td>{{viaje.fecha_hasta}}</td>
-                    <td><a href="/viajes/{{viaje.id}}/viaje">Join</a></td>
+                    <td><a href="/join/{{viaje.id}}">Join</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

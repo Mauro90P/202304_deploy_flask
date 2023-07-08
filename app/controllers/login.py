@@ -7,7 +7,7 @@ bcrypt = Bcrypt(app)
 
 #1_/login: Renderiza la plantilla 'auth/login.html'
 
-@app.route('/index')
+@app.route('/login')
 def login():
 
     if 'usuario' in session:
@@ -24,7 +24,7 @@ def procesar_login():
 
     if not usuario_encontrado:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/index')
+        return redirect('/login')
 
     login_seguro = bcrypt.check_password_hash(usuario_encontrado.password, request.form['password'])
 
@@ -42,9 +42,9 @@ def procesar_login():
 
     else:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/registro')
+        return redirect('/login')
 
-    return redirect('/index')
+    return redirect('/login')
 
 
 
@@ -60,7 +60,7 @@ def procesar_registro():
         return redirect('/registro')
     
     if not Usuario.validar(request.form):
-        return redirect('/index')
+        return redirect('/registro')
 
     password_hash = bcrypt.generate_password_hash(request.form['password'])
 
@@ -74,7 +74,7 @@ def procesar_registro():
     existe_usuario = Usuario.get_by_email(request.form['email'])
     if existe_usuario:
         flash("el correo ya está registrado.", "danger")
-        return redirect('/index')
+        return redirect('/registro')
 
 
     resultado = Usuario.save(data)
@@ -83,7 +83,7 @@ def procesar_registro():
     else:
         flash("Errores", "danger")
 
-    return redirect('/index')
+    return redirect('/login')
 
 
 #4_/salir: Borra todos los datos de la sesión 
@@ -92,5 +92,5 @@ def procesar_registro():
 def salir():
     session.clear()
     flash('Saliste sin problemas!!!', 'info')
-    return redirect('/index')
+    return redirect('/login')
 

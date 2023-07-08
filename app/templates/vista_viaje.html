@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="/index" style="color: antiquewhite;">Home</a>
+            <a class="nav-link" href="/login" style="color: antiquewhite;">Home</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/salir" style="color: antiquewhite;">Logout</a>
@@ -15,10 +15,11 @@
 <div class="card" style="width: 40rem; margin-top: 70px;">
     <h2 class="text">Destino del viaje</h2>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">Planned By:{{session['usuario']['nombre']}}</li>
-        <li class="list-group-item">Descripcion: {{ descripcion }} </li>
-        <li class="list-group-item">Travel Date From: {{ fecha_desde }} </li>
-        <li class="list-group-item">Travel Date To: {{ fecha_hasta }} </li>
+        <li class="list-group-item">Planned By:{{viaje.creador_id}}</li> # Integrar el nombre del usuario
+        <li class="list-group-item">Descripcion: {{ viaje.descripcion }} </li>
+        <li class="list-group-item">Travel Date From: {{ viaje.fecha_desde }} </li>
+        <li class="list-group-item">Travel Date To: {{ viaje.fecha_hasta }} </li>
+        <li class="list-group-item">Destino: {{ viaje.destino }} </li>
     </ul>
 </div>
 
@@ -28,7 +29,7 @@
         Other User Joing the Trip:
     </div>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">nombre jinja</li>
+        <li class="list-group-item">nombre jinja</li> #Nombre de los que se unen al viaje en el accionar JOIN
     </ul>
 </div>
 {% endblock %}

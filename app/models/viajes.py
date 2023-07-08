@@ -41,29 +41,42 @@ class Viajes:
 
 
     @classmethod
-    def get(cls, id):
+    def get(cls,id):
+        data={"id":id}
         sql = """ 
-         SELECT destino,fecha_desde, fecha_hasta,descripcion FROM Viajes;
+         SELECT id,destino,fecha_desde, fecha_hasta,descripcion,creador_id FROM  Viajes WHERE id=%(id)s;
         """
-        data = {
-            'id': id
-        }
         result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data);
         return cls(result[0])
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls,data):
         todos_los_datos = []
 
         sql = """
-        SELECT descripcion,fecha_desde,fecha_hasta,destino FROM Viajes;
+        SELECT Viajes.id,descripcion,fecha_desde,fecha_hasta,destino,creador_id FROM Viajes INNER JOIN Usuarios ON Usuarios.id = Viajes.creador_id WHERE creador_id = %(usuario_id)s;
         """
-        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql);
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql,data);
         for fila in result:
             instancia = cls(fila)
             todos_los_datos.append(instancia)
         return todos_los_datos
     
+    @classmethod
+    def get_otros_viajes(cls,data):
+        todos_los_datos = []
+
+        sql = """
+        SELECT Viajes.id,descripcion,fecha_desde,fecha_hasta,destino,creador_id FROM Viajes INNER JOIN Usuarios ON Usuarios.id = Viajes.creador_id WHERE creador_id != %(usuario_id)s;
+        """
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql,data);
+        for fila in result:
+            instancia = cls(fila)
+            todos_los_datos.append(instancia)
+        return todos_los_datos
+
+
+
 #3_/procesar_login procesa el regsitro del login donde hace match el correo con password
 
     @classmethod

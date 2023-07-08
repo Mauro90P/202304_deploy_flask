@@ -18,13 +18,41 @@ USE `db_proyecto`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `usuarios`
+-- Table structure for table `PasajerosViaje`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
+DROP TABLE IF EXISTS `PasajerosViaje`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usuarios` (
+CREATE TABLE `PasajerosViaje` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `usuario_id` int unsigned NOT NULL,
+  `viaje_id` int unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Usuarios_has_Viajes_Viajes1_idx` (`viaje_id`),
+  KEY `fk_Usuarios_has_Viajes_Usuarios_idx` (`usuario_id`),
+  CONSTRAINT `fk_Usuarios_has_Viajes_Usuarios` FOREIGN KEY (`usuario_id`) REFERENCES `Usuarios` (`id`),
+  CONSTRAINT `fk_Usuarios_has_Viajes_Viajes1` FOREIGN KEY (`viaje_id`) REFERENCES `Viajes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PasajerosViaje`
+--
+
+LOCK TABLES `PasajerosViaje` WRITE;
+/*!40000 ALTER TABLE `PasajerosViaje` DISABLE KEYS */;
+/*!40000 ALTER TABLE `PasajerosViaje` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Usuarios`
+--
+
+DROP TABLE IF EXISTS `Usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Usuarios` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   `apellido` varchar(250) NOT NULL,
@@ -32,17 +60,17 @@ CREATE TABLE `usuarios` (
   `password` varchar(250) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `usuarios`
+-- Dumping data for table `Usuarios`
 --
 
-LOCK TABLES `usuarios` WRITE;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Mauricio','Pardo Figueroaa','mauriciopardo.figueroa@gmail.com','$2b$12$zcUfYm.jM8UwNL7PMiM9q.5KqxjPBq6SX3dtN9Q7OkmXHc5hjyMYK'),(2,'Marco ','Fuentes Ruiz','manuel223@gmail.com','$2b$12$qUbCQ4o31Cx5oIC6EZiHLeC91lD8oPOgPsCXsScwP1V3FKNvPO6dK'),(3,'Marcelo ','Cortez Vidal','sam123@gmail.com','$2b$12$UH0aGbPVLu935MZ8JQ3ZJu62wUNQ6iTdRxXB2u8fmTyqzPcKi6yvC'),(4,'RAMON FEDERICO','ROLES','juanrman23@gmail.com','$2b$12$SKOFCahoT8IEf797h0vsoeMHVgcGzGu6BapBou1dkK6RFmKyO1mKy'),(5,'JUAN ','LOAN','carlos123@gmail.com','$2b$12$9fR22pER2TPA2zFv80WfKe9ho9W6MJ/MTzcqUjVaaZGgJR8QLuBVm'),(6,'KARINA ','JOREZ','karina23@gmail.com','$2b$12$0WY/CjJ/Jc1yA8MdqoNzSeUq0L/3OrKwh2EnFU5QoRy1Pw39ikA9a');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+LOCK TABLES `Usuarios` WRITE;
+/*!40000 ALTER TABLE `Usuarios` DISABLE KEYS */;
+INSERT INTO `Usuarios` VALUES (1,'Mauricio Pardo','RODRIGUEZ GALVEZ','mauriciopardo.figueroa@gmail.com','$2b$12$uJRS3mI6/ulR5EDg2VnUTuGcpvoawe4k7kFwzoypr8ZM4NLlSLlMK'),(2,'Carlos ','Cuevas ','cuevas@gmail.com','$2b$12$qK2dhD1XhX4W9ZEHc3EzleAz3J8hGXni/Ih7D.3j383wVpy5M9VzO'),(3,'Karina ','Fernandez','karina23@gmail.com','$2b$12$KR/LJsbcVP4L2530Z/da9uoUbN9lqqsa8I7Lx6h42PoWQg/FF5Sy6'),(4,'Marcos','Mendez','marcosmendez@gmail.com','$2b$12$FvCn.PavxBggHgw/cVso7.14O9tdaqq1mtj5jr/VI.kgZe8TybMxK'),(5,'MANUEL','SOTO','soto@gmail.com','$2b$12$i5vg2LlqdwqVXcG1BUiMA.wCh2FML1m5jR7L.VJQdOmyKuh/DBlr.');
+/*!40000 ALTER TABLE `Usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -53,14 +81,14 @@ DROP TABLE IF EXISTS `Viajes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Viajes` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `creador_id` int NOT NULL,
   `destino` varchar(255) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
   `fecha_desde` date NOT NULL,
   `fecha_hasta` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +97,7 @@ CREATE TABLE `Viajes` (
 
 LOCK TABLES `Viajes` WRITE;
 /*!40000 ALTER TABLE `Viajes` DISABLE KEYS */;
-INSERT INTO `Viajes` VALUES (1,2,'ESTADOS UNIDOS','Viaje a centro america con todo incluido','2023-04-14','2023-08-17'),(2,2,'Black Rock, Nevada','Viaje gratis, por evento','2023-07-08','2023-07-25'),(3,2,'EL QUISCO','Viaje a la playa con desayuno incluido','2023-07-13','2023-07-27'),(4,2,'PERU,CUSCO','Viaje de aventura hacia el amazona','2023-08-16','2023-09-27'),(5,2,'COLOMBIA, SAN ANDRES','Viaje todo incluido con unas vistas maravillosas','2023-10-04','2023-12-21'),(6,4,'ISLA DE PASCUA','Viaje a las islas de chile mas tropical que tiene','2023-08-17','2023-08-30'),(7,4,'OSORNO','Viaje al Sur de chile con desayuno incluido','2023-09-05','2023-09-20'),(8,4,'CHILLAN, TERMAS','Viaje al Sur de chile con desayuno incluido y con termas','2023-10-31','2023-11-08'),(9,4,'CURICO','Viaje al Sur de CHILE a las viñas','2023-09-12','2023-09-27'),(10,3,'BRASIL, PLAYAS','Viaje con todo incluido a las playas mas tropicales de este pais','2023-07-12','2023-07-27'),(11,3,'ECUADOR, CULTURA','Viaje con todo incluido a las lindas culturas de este pais','2023-07-19','2023-07-31'),(12,3,'ARGENTINA, VIÑAS','Viaje al pais trasandino con su hermosa cultura y gastronomia','2023-08-09','2023-09-27'),(13,2,'PUERTO MONTT','Viaje con todo incluido','2023-08-09','2023-07-19'),(14,2,'PUERTO MONTT','Viaje con todo incluido','2023-08-09','2023-07-19'),(15,2,'PUERTO MONTT 2','Viaje con todo incluido2','2023-08-09','2023-07-19'),(16,3,'PUCON','Un lugar excelente para disfrutar ','2023-07-12','2023-07-26'),(17,3,'PUCON 3','Un lugar excelente para disfrutar 3','2023-07-12','2023-07-26'),(18,5,'SANTIAGO','CENTRO DE CHILE','2023-07-07','2023-07-27'),(19,1,'CARTAJENAS','PLAYA CARIBE','2023-07-14','2023-07-28'),(20,1,'ISLA GALAPAGOS','ISLA PRECIOSA','2023-07-14','2023-07-27'),(21,1,'VENEZUELA','PLAYAS Y CARIBE ','2023-07-07','2023-07-26'),(22,1,'CUBA','Viaje paraiso con playas blancas ','2023-07-07','2023-07-27'),(23,1,'THAITI','BELLO','2023-07-06','2023-07-26'),(24,1,'THAITI','BELLO','2023-07-06','2023-07-26'),(25,1,'INDIA','LUGAR DE CULTURA BUDISTA','2023-07-07','2023-07-20'),(26,1,'Black Rock, Nevada 222','ccccx','2023-07-13','2023-07-21'),(27,1,'THAITI .-sorry por no cumplir con el 100','prueba ','2023-07-07','2023-07-26'),(28,6,'MEXICO','Lindas playas','2023-07-12','2023-07-27');
+INSERT INTO `Viajes` VALUES (1,1,'Black Rock, Nevada','LUGAR DE NIEVE ','2023-07-14','2023-07-22'),(2,1,'TEMUCO','LUGAR DE HERMOSO','2023-07-14','2023-07-26'),(3,1,'VALDIVIA','LINDO LUGAR DE PASEO','2023-07-05','2023-07-20'),(4,1,'VALDIVIA','LINDO LUGAR DE PASEO','2023-07-05','2023-07-20'),(5,1,'VALDIVIA','LINDO LUGAR DE PASEO','2023-07-05','2023-07-20'),(6,1,'PICHILEMU','Playas','2023-07-15','2023-07-20'),(7,1,'OSORNO','Playas','2023-07-15','2023-07-20'),(8,1,'THAITI','LUGAR PARADISICO','2023-07-20','2023-07-31'),(9,1,'THAITI','LUGAR DE EN SUEÑO','2023-07-20','2023-07-31'),(10,1,'THAITI33','VOLCAN','2023-07-20','2023-07-31'),(15,2,'Carlos RESORT 1','Lugar de paisajes y playas hermosas ','2023-09-06','2023-11-21'),(16,2,'Carlos PUCON','Lugar de paisajes y playas hermosas ','2023-09-06','2023-11-21'),(17,2,'Carlos Bariloche ','Lugar de paisajes y playas hermosas ','2023-09-06','2023-11-21'),(18,2,'Carlos Bariloche ','Lugar de paisajes y playas hermosas ','2023-09-06','2023-11-21'),(20,4,'SAN ANDRES ','PLAYAS','2023-07-07','2023-07-18'),(21,4,'SAN ANDRES 222','PLAYAS','2023-07-07','2023-07-18'),(22,4,'SAN ANDRES 222','PLAYAS','2023-07-07','2023-07-18'),(24,4,'juan fernandez','marcos','2023-07-06','2023-07-26'),(25,4,'MEXICO','MEXICO1','2023-07-19','2023-07-25'),(26,4,'cuba','dd','2023-07-07','2023-07-20'),(27,4,'ECUADOR','DDFDD','2023-07-07','2023-07-25'),(28,3,'Black Rock, Nevada','fdfdfd','2023-07-21','2023-07-19');
 /*!40000 ALTER TABLE `Viajes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -82,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-02 22:54:34
+-- Dump completed on 2023-07-08 17:26:46
