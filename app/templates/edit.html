@@ -19,20 +19,21 @@
     </nav>
     <h2 class="h2">Edit Your Job Posting</h2>
     <div class=" col-lg-4 col-md-6 col-sm-12" style="padding: 50px;">
-        <form action="/procesar_edit" method="post">
+        <form action="/edit/{{dato.id}}/job" method="POST">
             <div class="form-group">
                 <label for="destination">Title</label>
                 <input type="text" class="form-control" required id="destination" placeholder="Enter Title"
-                    name="titulo">
+                    name="titulo" value="{{dato.titulo}}">
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" rows="3" placeholder="Enter description"
-                    name="descripcion"></textarea>
+                    name="descripcion">{{dato.descripcion}}</textarea>
             </div>
             <div class="form-group">
                 <label for="destination">Location</label>
-                <input type="text" class="form-control" id="destination" placeholder="Enter Location" name="location">
+                <input type="text" class="form-control" id="destination" placeholder="Enter Location" name="location"
+                    value="{{dato.location}}">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

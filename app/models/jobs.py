@@ -71,21 +71,18 @@ class Job:
         return todos_los_datos
 
 
-
-
-
     @classmethod
     def get_my_job(cls,data):
-        # todos_los_datos = []
-
+        todos_los_datos = []
         sql = """
-         SELECT * FROM jobs JOIN usuarios ON jobs.creador_job = usuarios.id;
+        SELECT id, titulo, descripcion, location, creador_job, usuario_id FROM jobs WHERE usuario_id= %(usuario_id)s;
         """
-        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql)
-        # for fila in result:
-        #     instancia = cls(fila)
-        #     todos_los_datos.append(instancia)
-        return cls(result[0])
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql,data)
+        print(result)
+        for fila in result:
+            instancia = cls(fila)
+            todos_los_datos.append(instancia)
+        return todos_los_datos
 
 
 
@@ -142,3 +139,4 @@ class Job:
         sql = """
         UPDATE jobs SET titulo = %(titulo)s, descripcion = %(descripcion)s, location = %(location)s WHERE id = %(id)s;
         """
+        return connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql,data)

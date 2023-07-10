@@ -29,13 +29,13 @@ def dashboard():
     if 'usuario' not in session:
         return redirect('/login')
     data = {
-        **request.form,
+        # **request.form,
         'usuario_id': session["usuario"]["usuario_id"]
     }     
     jobs =Job.get_all()
-    return render_template('dashboard.html', data=jobs)
-
-
+    jobs1 =Job.get_my_job(data)
+    print(session["usuario"]["usuario_id"])
+    return render_template('dashboard.html', data=jobs, jobs1=jobs1)
 
 
 
@@ -61,19 +61,10 @@ def join(id):
 
 
 
-
-
-
 #FUNCION QUE AGREGAR
 @app.route('/addJob')
 def addJob():
     return render_template('addJob.html')
-
-
-@app.route('/edit/<int:id>')
-def edit(id):
-    return render_template('edit.html')
-
 
 
 
@@ -88,7 +79,7 @@ def view(id):
 
 
 #FUNCION QUE DEBE EDITAR LOS DATOS DE JOB
-@app.route('/edit/<int:id>', methods=['POST'])
+@app.route('/edit/<int:id>/job', methods=['POST'])
 def procesar_edit(id):
     data = {
         'id': id,
@@ -98,4 +89,12 @@ def procesar_edit(id):
     }
     Job.update(data)
     flash('Job actualizado correctamente', 'success')
-    return redirect('edit')
+    return redirect('/dashboard')
+
+
+@app.route('/edit/<int:id>')
+def edit(id):
+    data={"id":id}
+    vista=Job.get(data)
+    return render_template('edit.html', dato=vista)
+
