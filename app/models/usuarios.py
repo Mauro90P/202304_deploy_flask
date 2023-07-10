@@ -26,12 +26,13 @@ class Usuario:
 
         return todo_ok
 
+
     @classmethod
     def get_all(cls):
         todos_los_datos = []
 
         sql = """
-        SELECT id, nombre,apellido,email, password FROM usuarios;
+        SELECT nombre,apellido,email FROM usuarios;
         """
         result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql);
         for fila in result:
@@ -40,7 +41,7 @@ class Usuario:
         return todos_los_datos
 
     def crear(self):
-        sql = "INSERT INTO Usuarios (nombre,apellido,email, password) VALUES (%(nombre)s,%(apellido)s, %(email)s, %(password)s);"
+        sql = "INSERT INTO usuarios (nombre,apellido,email, password) VALUES (%(nombre)s,%(apellido)s, %(email)s, %(password)s);"
         data = {
             'nombre': self.nombre,
             'email': self.email,
@@ -50,9 +51,10 @@ class Usuario:
         self.id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         return self
 
+
     @classmethod
     def save(cls, data):
-        sql = "INSERT INTO Usuarios (nombre, apellido,email, password) VALUES (%(nombre)s, %(apellido)s,%(email)s, %(password)s);"
+        sql = "INSERT INTO usuarios (nombre, apellido,email, password) VALUES (%(nombre)s, %(apellido)s,%(email)s, %(password)s);"
         id = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         print("ID:", id)
         resultado = None
@@ -60,16 +62,39 @@ class Usuario:
             resultado = cls.get(id)
         return resultado
 
+
+    @classmethod
+    def get_otros_usuarios(cls,data):
+        todos_los_datos = []
+
+        sql = """
+        SELECT nombre,apellido,email FROM usuarios;
+        """
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql,data)
+        for fila in result:
+            instancia = cls(fila)
+            todos_los_datos.append(instancia)
+        return todos_los_datos
+
+
+
+
+
+
+
     @classmethod
     def get(cls, id):
         sql = """
-        SELECT id, nombre,apellido,email, password FROM Usuarios where id = %(id)s;
+        SELECT nombre,apellido,email FROM usuarios;
         """
         data = {
             'id': id
         }
-        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data);
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
         return cls(result[0])
+
+
+
 
 
 #3_/procesar_login procesa el regsitro del login donde hace match el correo con password
@@ -77,7 +102,7 @@ class Usuario:
     @classmethod
     def get_by_email(cls, email):
         sql = """
-        SELECT id, nombre, apellido,email, password FROM Usuarios where email = %(email)s;
+        SELECT id, nombre, apellido,email, password FROM usuarios where email = %(email)s;
         """
         data = {
             'email': email
@@ -90,16 +115,18 @@ class Usuario:
         return None
 
 
+
+
 #4_/Elimina registros   
     @classmethod
     def delete(cls, id):
         sql = """
-        DELETE FROM Usuarios where id = %(id)s;
+        DELETE FROM usuarios where id = %(id)s;
         """
         data = {
             'id': id
         }
-        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data);
+        result = connectToMySQL(os.getenv("BASE_DE_DATOS")).query_db(sql, data)
 
         return result
 
