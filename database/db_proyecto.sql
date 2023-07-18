@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `db_proyecto` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `db_proyecto`;
+CREATE DATABASE  IF NOT EXISTS `db_tareas` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `db_tareas`;
 -- MySQL dump 10.13  Distrib 8.0.31, for macos12 (x86_64)
 --
--- Host: 127.0.0.1    Database: db_proyecto
+-- Host: 127.0.0.1    Database: db_tareas
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -18,35 +18,35 @@ USE `db_proyecto`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `jobs`
+-- Table structure for table `tareas`
 --
 
-DROP TABLE IF EXISTS `jobs`;
+DROP TABLE IF EXISTS `tareas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `jobs` (
+CREATE TABLE `tareas` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(255) NOT NULL,
+  `nombre_tarea` varchar(255) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `creador_job` int NOT NULL,
-  `usuario_id` int unsigned DEFAULT NULL,
+  `tiempo_inicio` time DEFAULT NULL,
+  `usuarios_id` int unsigned NOT NULL,
+  `timepo_total` varchar(45) DEFAULT NULL,
+  `tiempo_terminado` varchar(45) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `fk_job_user_idx` (`usuario_id`),
-  CONSTRAINT `fk_job_user` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  KEY `fk_tareas_usuarios_idx` (`usuarios_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `jobs`
+-- Dumping data for table `tareas`
 --
 
-LOCK TABLES `jobs` WRITE;
-/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (2,'CARTAJENA 2444224','RIOS23434344 22424222','OSORNO',2,2,'2023-07-10 14:12:57','2023-07-10 15:38:48'),(3,'LOS RIOS','LAGOS','CHILLAN. ',2,2,'2023-07-10 14:13:10','2023-07-10 15:37:44'),(5,'adsdsd','sddssd','sdsdds',1,2,'2023-07-10 14:58:12','2023-07-10 15:46:41'),(6,'xxxvx','xvvxvxvxvx','xvxvvxvx',1,2,'2023-07-10 14:59:10','2023-07-10 15:46:41'),(7,'fvdfbd3353535','bdbbdbdf353535353535','bfddbdfbdbd3535353535',1,2,'2023-07-10 15:03:13','2023-07-10 15:46:41'),(8,'s3r33434543234t43','sfssf3453434534','sdsddssd3453445',1,2,'2023-07-10 15:05:41','2023-07-10 15:46:41'),(9,'fsfdd','sdfdfss','dsdsdfs',1,2,'2023-07-10 15:17:36','2023-07-10 15:46:41'),(10,'vceee4','35c','c3334c',2,2,'2023-07-10 15:23:52','2023-07-10 15:46:41'),(11,'eeer','eerere','eee',2,2,'2023-07-10 15:24:16','2023-07-10 15:46:41'),(12,'mascottasw22222','sdsdds','23ewd',2,2,'2023-07-10 15:42:52','2023-07-10 15:46:41'),(13,'PRUEBA DE DATOS ','DPODODDFDF','DDFFDDFDF',2,2,'2023-07-10 15:45:33','2023-07-10 15:46:41'),(14,'PRUEBA1SSSSS','PRUEBA1SSS','PRUEBA1SSSS',2,2,'2023-07-10 15:45:59','2023-07-10 15:46:41'),(15,'DSSDDSSDSD','SDSDDSDS','SDSDSDDS',2,2,'2023-07-10 15:46:07','2023-07-10 15:46:41'),(16,'PRUEBA DE ADD 1','PRUEBA DE ADD 1','PRUEBA DE ADD 1',2,NULL,'2023-07-10 15:47:10','2023-07-10 15:47:10'),(17,'hola','hola','ddssd',1,NULL,'2023-07-10 15:52:04','2023-07-10 15:52:04'),(18,'sddsds','sdsdds','sdsdsd',1,NULL,'2023-07-10 15:52:11','2023-07-10 15:52:11');
-/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+LOCK TABLES `tareas` WRITE;
+/*!40000 ALTER TABLE `tareas` DISABLE KEYS */;
+INSERT INTO `tareas` VALUES (4,'Historia','Estudiar sobre la 2 guerra Mundial',NULL,1,NULL,NULL,'2023-07-15 23:51:24','2023-07-15 23:51:24'),(6,'Musica ','Estudiar sobre las nota musicales y su variantes.',NULL,1,NULL,NULL,'2023-07-15 23:52:31','2023-07-15 23:52:31'),(9,'PYTHON','ESTUDIAR LAS FUNCIONES Y HERENCIA','22:04:36',1,'2 horas','3 horas','2023-07-16 02:04:36','2023-07-16 02:04:36'),(10,'JAVA','ESTUDIAR LAS FUNCIONES Y HERENCIA','22:05:04',1,'2 horas','3 horas','2023-07-16 02:05:04','2023-07-16 02:05:04'),(11,'RUBI','ESTUDIAR LAS FUNCIONES Y HERENCIA','22:05:14',1,'2 horas','3 horas','2023-07-16 02:05:14','2023-07-16 02:05:14'),(12,'C#','ESTUDIAR LAS FUNCIONES Y HERENCIA','22:05:28',1,'2 horas','3 horas','2023-07-16 02:05:28','2023-07-16 02:05:28'),(24,'ingles','Estudiar los verbos ',NULL,6,NULL,NULL,'2023-07-17 23:47:34','2023-07-17 23:47:34');
+/*!40000 ALTER TABLE `tareas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `usuarios` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'MARCOS ','RIQUELME ','MARCOS@GMAIL.COM','$2b$12$SYzlY4eBzCoCBtDRMbj5kOLuafVBC69CVQAkm.1ytgcNb.Or3tqH6'),(2,'ANDRES','ROMAN','AMRPERRES@GMAIL.COM','$2b$12$T8lrMpCENHq9D8L0WBkEOeJqjZn9fEkdH73.zEOL/EOx/kJaR0okK');
+INSERT INTO `usuarios` VALUES (1,'MARGARITA','LOPEZ','margaritalopez@gmail.com','$2b$12$EfdbXNwaoUdNaMhG8DK4n.iCk6M1q4deKVwAENmxFjQ.1h/CGloJG'),(4,'Hector','Roler','hector23@gmaail.com','$2b$12$C6KIBQdUCXxJ.XIa6Q/yFuROdJufhJOWr6VVF2F04Dszc9qad4HP.'),(5,'Mnauel','Soto','manuelsoto@gmail.com','$2b$12$rLE6M.tAkK/Kl8RgMyvMJ.xBkwwZT7HCKR0SIKnnHUT2aLweibB8C'),(6,'ENRIQUE ','SOTO','cuevas@gmail.com','$2b$12$gelov1PBohxJ7DAMhGDtR.FibXxlyxuQlebc9lnRo1RGQ8/1IFeMy');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-10 11:58:31
+-- Dump completed on 2023-07-18 17:44:13

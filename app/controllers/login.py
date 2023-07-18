@@ -5,8 +5,6 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app) 
 
 
-
-
 #1_/login: Renderiza la plantilla 'auth/login.html'
 
 @app.route('/login')
@@ -14,7 +12,6 @@ def login():
     if 'usuario' in session:
         return redirect('/')
     return render_template('login.html')
-
 
 #1.2_/procesar_login: Procesa el formulario de inicio de sesión enviado por POST
 
@@ -41,12 +38,12 @@ def procesar_login():
     if login_seguro:
         session['usuario'] = data
         flash('Genial, pudiste entrar sin problemas!!!!', 'success')
+        print (data)
 
     else:
         flash('Existe un error en tu correo o contraseña', 'danger')
         return redirect('/login')
-
-    return redirect('/dashboard')
+    return redirect('index')
 
 
 @app.route('/detalle')
@@ -57,15 +54,7 @@ def detalle():
         'usuario_id': session["usuario"]["usuario_id"],
     }
     otros_usuario = Usuario.get_otros_usuarios(data)
-    return render_template('dashboard.html', otros_usuario=otros_usuario)
-
-
-
-
-#2_/registro: Renderiza la plantilla 'registro.html'
-@app.route('/registro')
-def registro():
-    return render_template('/registro.html')
+    return render_template('index.html', otros_usuario=otros_usuario)
 
 
 
@@ -76,11 +65,11 @@ def procesar_registro():
     print("POST: ", request.form)
     if request.form['password'] != request.form['confirm_password']:
         flash("La contraseña no es igual", "danger")
-        return redirect('/registro')
+        return redirect('/register')
     
     if not Usuario.validar(request.form):
 
-        return redirect('/registro')
+        return redirect('/register')
 
     password_hash = bcrypt.generate_password_hash(request.form['password'])
     data = {
@@ -92,7 +81,7 @@ def procesar_registro():
     existe_usuario = Usuario.get_by_email(request.form['email'])
     if existe_usuario:
         flash("el correo ya está registrado.", "danger")
-        return redirect('/registro')
+        return redirect('/register')
     resultado = Usuario.save(data)
     if resultado:
         flash("Registrado Correctamente", "success")
@@ -102,10 +91,11 @@ def procesar_registro():
     return redirect('/login')
 
 
+#2_/registro: de usuario.
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
-
-
-#3_/salir: Borra todos los datos de la sesión 
 
 @app.route('/salir')
 def salir():
