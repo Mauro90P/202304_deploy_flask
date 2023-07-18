@@ -1,6 +1,6 @@
 Título del proyecto: Seguimiento de tiempo y cantidad de tareas
 
-Descripción del proyecto:
+Descripción del proyecto :
 El objetivo de este proyecto es desarrollar una aplicación que permita a 
 los usuarios realizar un seguimiento del tiempo y la cantidad que dedican 
 a sus diferentes tareas o proyectos. La aplicación proporcionará diversas 
