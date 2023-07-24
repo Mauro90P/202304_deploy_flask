@@ -1,20 +1,20 @@
 from flask import render_template, request, redirect, session, flash
 from app.models.usuarios import Usuario
-from app.models.viajes import Viajes
 from app import app
 from flask_bcrypt import Bcrypt        
 bcrypt = Bcrypt(app) 
 
+
 #1_/login: Renderiza la plantilla 'auth/login.html'
 
-@app.route('/index')
+@app.route('/login')
 def login():
-
     if 'usuario' in session:
         return redirect('/')
-    return render_template('index.html')
+    return render_template('login.html')
 
-#2_/procesar_login: Procesa el formulario de inicio de sesión enviado por POST
+
+#1.2_/procesar_login: Procesa el formulario de inicio de sesión enviado por POST
 
 @app.route('/procesar_login', methods=['POST'])
 def procesar_login():
@@ -24,7 +24,7 @@ def procesar_login():
 
     if not usuario_encontrado:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/index')
+        return redirect('/login')
 
     login_seguro = bcrypt.check_password_hash(usuario_encontrado.password, request.form['password'])
 
@@ -33,6 +33,7 @@ def procesar_login():
         "email": usuario_encontrado.email,
         "apellido": usuario_encontrado.apellido,
         "nombre": usuario_encontrado.nombre,
+        "username": usuario_encontrado.username,
         "password": usuario_encontrado.password,
     }
 
@@ -42,55 +43,60 @@ def procesar_login():
 
     else:
         flash('Existe un error en tu correo o contraseña', 'danger')
-        return redirect('/registro')
+        return redirect('/login')
 
-    return redirect('/index')
+    return redirect('/dashboard')
 
 
+@app.route('/detalle')
+def detalle():
+    if 'usuario' not in session:
+        return redirect('/login')
+    data = {
+        'usuario_id': session["usuario"]["usuario_id"],
+    }
+    otros_usuario = Usuario.get_otros_usuarios(data)
+    return render_template('dashboard.html', otros_usuario=otros_usuario)
 
-#3_/procesar_registro: Procesa el formulario de registro enviado por POST
 
+#2.1_/procesar_registro: Procesa el formulario de registro enviado por POST
 
 @app.route('/procesar_registro', methods=['POST'])
 def procesar_registro():
     print("POST: ", request.form)
-
     if request.form['password'] != request.form['confirm_password']:
         flash("La contraseña no es igual", "danger")
         return redirect('/registro')
     
     if not Usuario.validar(request.form):
-        return redirect('/index')
+
+        return redirect('/registro')
 
     password_hash = bcrypt.generate_password_hash(request.form['password'])
-
     data = {
         'nombre': request.form['nombre'],
-        'email': request.form['email'],
         'apellido': request.form['apellido'],
+        'email': request.form['email'],
+        'username': request.form['username'],
         'password': password_hash,
     }
-
     existe_usuario = Usuario.get_by_email(request.form['email'])
     if existe_usuario:
         flash("el correo ya está registrado.", "danger")
-        return redirect('/index')
-
-
+        return redirect('/registro')
     resultado = Usuario.save(data)
     if resultado:
         flash("Registrado Correctamente", "success")
     else:
         flash("Errores", "danger")
+        print("resultado")
+    return redirect('/login')
 
-    return redirect('/index')
-
-
-#4_/salir: Borra todos los datos de la sesión 
+#3_/salir: Borra todos los datos de la sesión 
 
 @app.route('/salir')
 def salir():
     session.clear()
     flash('Saliste sin problemas!!!', 'info')
-    return redirect('/index')
+    return redirect('/login')
 
